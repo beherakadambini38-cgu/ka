@@ -1,0 +1,108 @@
+import java.util.*;
+import java.io.*;
+
+// Student class
+class Student implements Serializable {
+    String name;
+    int roll;
+    String grade;
+
+    Student(String n, int r, String g) {
+        name = n;
+        roll = r;
+        grade = g;
+    }
+
+    public String toString() {
+        return name + " | Roll: " + roll + " | Grade: " + grade;
+    }
+}
+
+// Main class
+public class Main {
+    static ArrayList<Student> list = new ArrayList<>();
+    static Scanner sc = new Scanner(System.in);
+
+    // Add student
+    static void add() {
+        System.out.print("Name: ");
+        String name = sc.nextLine();
+
+        System.out.print("Roll: ");
+        int roll = sc.nextInt();
+        sc.nextLine();
+
+        System.out.print("Grade: ");
+        String grade = sc.nextLine();
+
+        if (name.isEmpty() || grade.isEmpty()) {
+            System.out.println("Invalid input");
+            return;
+        }
+
+        list.add(new Student(name, roll, grade));
+        System.out.println("Added");
+    }
+
+    // Display
+    static void display() {
+        if (list.isEmpty()) {
+            System.out.println("No data");
+            return;
+        }
+        for (Student s : list) {
+            System.out.println(s);
+        }
+    }
+
+    // Search
+    static void search() {
+        System.out.print("Enter roll: ");
+        int r = sc.nextInt();
+
+        for (Student s : list) {
+            if (s.roll == r) {
+                System.out.println("Found: " + s);
+                return;
+            }
+        }
+        System.out.println("Not found");
+    }
+
+    // Save to file
+    static void save() {
+        try {
+            ObjectOutputStream o = new ObjectOutputStream(new FileOutputStream("data.dat"));
+            o.writeObject(list);
+            o.close();
+        } catch (Exception e) {}
+    }
+
+    // Load from file
+    static void load() {
+        try {
+            ObjectInputStream i = new ObjectInputStream(new FileInputStream("data.dat"));
+            list = (ArrayList<Student>) i.readObject();
+            i.close();
+        } catch (Exception e) {}
+    }
+
+    public static void main(String[] args) {
+        load();
+        int ch;
+
+        do {
+            System.out.println("\n1.Add  2.Display  3.Search  4.Exit");
+            System.out.print("Choice: ");
+            ch = sc.nextInt();
+            sc.nextLine();
+
+            if (ch == 1) add();
+            else if (ch == 2) display();
+            else if (ch == 3) search();
+            else if (ch == 4) save();
+            else System.out.println("Wrong choice");
+
+        } while (ch != 4);
+    }
+}
