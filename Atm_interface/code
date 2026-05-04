@@ -1,0 +1,104 @@
+import java.util.Scanner;
+
+// Bank Account Class
+class BankAccount {
+    private double balance;
+
+    // Constructor
+    public BankAccount(double balance) {
+        this.balance = balance;
+    }
+
+    // Check Balance
+    public double checkBalance() {
+        return balance;
+    }
+
+    // Deposit Method
+    public boolean deposit(double amount) {
+        if (amount <= 0) {
+            return false;
+        }
+        balance += amount;
+        return true;
+    }
+
+    // Withdraw Method
+    public boolean withdraw(double amount) {
+        if (amount <= 0 || amount > balance) {
+            return false;
+        }
+        balance -= amount;
+        return true;
+    }
+}
+
+// ATM Class
+class ATM {
+    private BankAccount account;
+    private Scanner sc = new Scanner(System.in);
+
+    public ATM(BankAccount account) {
+        this.account = account;
+    }
+
+    public void showMenu() {
+        int choice;
+
+        do {
+            System.out.println("\n====== ATM MACHINE ======");
+            System.out.println("1. Check Balance");
+            System.out.println("2. Deposit");
+            System.out.println("3. Withdraw");
+            System.out.println("4. Exit");
+            System.out.print("Choose option: ");
+
+            choice = sc.nextInt();
+
+            switch (choice) {
+                case 1:
+                    System.out.println("💰 Balance: ₹" + account.checkBalance());
+                    break;
+
+                case 2:
+                    System.out.print("Enter amount to deposit: ₹");
+                    double dep = sc.nextDouble();
+
+                    if (account.deposit(dep)) {
+                        System.out.println("✅ Deposit Successful!");
+                    } else {
+                        System.out.println("❌ Invalid amount. Deposit Failed.");
+                    }
+                    break;
+
+                case 3:
+                    System.out.print("Enter amount to withdraw: ₹");
+                    double with = sc.nextDouble();
+
+                    if (account.withdraw(with)) {
+                        System.out.println("✅ Withdrawal Successful!");
+                    } else {
+                        System.out.println("❌ Transaction Failed (Insufficient Balance / Invalid Amount)");
+                    }
+                    break;
+
+                case 4:
+                    System.out.println("🙏 Thank you for using ATM!");
+                    break;
+
+                default:
+                    System.out.println("⚠ Invalid choice. Try again!");
+            }
+
+        } while (choice != 4);
+    }
+}
+
+// Main Class
+public class Main {
+    public static void main(String[] args) {
+        BankAccount user = new BankAccount(3000); // initial balance
+        ATM atm = new ATM(user);
+        atm.showMenu();
+    }
+}
